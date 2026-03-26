@@ -6,11 +6,6 @@ from dotenv import load_dotenv
 
 load_dotenv(override=True)
 api_key = os.getenv("GEMINI_API_KEY")
-print("\n" + "="*30)
-print(f"DEBUG: Key Starts With : {str(api_key)[:10]}")
-print(f"DEBUG: Key Ends With   : {str(api_key)[-5:]}")
-print(f"DEBUG: Key Length      : {len(str(api_key))}")
-print("="*30 + "\n")
 
 # Initialize the NEW client
 client = genai.Client(api_key=api_key)
