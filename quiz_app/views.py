@@ -174,6 +174,34 @@ def course_player(request, course_slug):
         'course': course,  
         'course_data': json.dumps(course_data)
     })
+
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
+def register_page(request):
+    """Renders the registration page and handles new user creation"""
+    # Redirect if they are already logged in
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Log the user in immediately after successful registration
+            login(request, user)
+            return redirect('dashboard')
+        else:
+            # Pass form errors to the Django messages framework
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
+    else:
+        form = UserCreationForm()
+
+    return render(request, 'register.html', {'form': form})
     
 
 def login_page(request):

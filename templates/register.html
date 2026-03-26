@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register | E-Learning</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body style="background-color: #f5f7fa; display: flex; align-items: center; justify-content: center; height: 100vh;">
+
+    <div class="login-card" style="display: block;"> 
+        <div class="logo" style="justify-content: center; margin-bottom: 20px;">
+            <i class="fas fa-pen-nib"></i> e-learning
+        </div>
+        <h2>Create Account</h2>
+        <p>Join us and start learning today!</p>
+
+        <form action="{% url 'register_page' %}" method="POST" autocomplete="off">
+            {% csrf_token %}
+            
+            <!-- Dynamically render Django's built-in form fields -->
+            {% for field in form %}
+            <div class="input-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+            </div>
+            {% endfor %}
+
+            {% if messages %}
+                <div style="color: red; text-align: center; margin-bottom: 10px; font-size: 14px;">
+                    {% for message in messages %}
+                        {{ message }}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-orange" style="width: 100%; margin-top: 10px;">Sign Up</button>
+        </form>
+
+        <p style="margin-top: 20px; font-size: 14px; color: #666; text-align: center;">
+            Already have an account? <a href="{% url 'login_page' %}" style="color: var(--primary-orange);">Sign In</a>
+        </p>
+    </div>
+
+</body>
+</html>
