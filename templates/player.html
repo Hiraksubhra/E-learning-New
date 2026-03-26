@@ -72,6 +72,31 @@
         </aside>
 
     </div>
+    
+    <!-- AI Study Buddy Widget -->
+    <div id="ai-chat-widget" class="chat-widget collapsed">
+        <div class="chat-header" onclick="toggleChat()">
+            <div class="header-title">
+                <i class="fa-solid fa-robot"></i>
+                <span>AI Study Buddy</span>
+            </div>
+            <i class="fa-solid fa-chevron-up toggle-icon" id="chat-toggle-icon"></i>
+        </div>
+        
+        <div class="chat-body" id="chat-body">
+            <div class="message ai-message">
+                <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+                <div class="bubble">Hi! I'm your AI Study Buddy. Ask me anything about this specific lesson!</div>
+            </div>
+        </div>
+
+        <div class="chat-footer">
+            <input type="text" id="chat-input" placeholder="Ask about the video..." onkeypress="handleChatEnter(event)">
+            <button class="send-btn" onclick="sendChatMessage()">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
 
     <script>
         // The 'safe' filter is CRITICAL. It prevents Django from escaping quotes.

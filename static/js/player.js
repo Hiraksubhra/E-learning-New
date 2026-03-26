@@ -1,3 +1,4 @@
+let currentLessonTranscript = "";
 const player = document.getElementById('mainPlayer');
 const lessonTitle = document.getElementById('lessonTitle');
 const lessonDesc = document.getElementById('lessonDescription');
@@ -112,7 +113,97 @@ function loadLesson(lesson) {
     lessonTitle.innerText = lesson.title || "Untitled Lesson";
     lessonDesc.innerText = lesson.content || "No description available for this lesson.";
     lessonDuration.innerText = lesson.duration || "--:--";
+    currentLessonTranscript = lesson.content || "";
 }
 
 // Start the player
 initPlayer();
+
+// AI STUDY BUDDY LOGIC
+
+function toggleChat() {
+    const widget = document.getElementById('ai-chat-widget');
+    widget.classList.toggle('collapsed');
+}
+
+function handleChatEnter(event) {
+    if (event.key === 'Enter') {
+        sendChatMessage();
+    }
+}
+
+async function sendChatMessage() {
+    const input = document.getElementById('chat-input');
+    const message = input.value.trim();
+    if (!message) return;
+
+    // Append User Message to UI
+    appendMessage(message, 'user');
+    input.value = '';
+
+    // Show Loading State for AI
+    const loadingId = 'loading-' + Date.now();
+    appendMessage('...', 'ai', loadingId);
+
+    // Send to Backend
+    try {
+        const response = await fetch('http://127.0.0.1:8000/api/ask-buddy/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                question: message,
+                context: currentLessonTranscript
+            })
+        });
+
+        const data = await response.json();
+
+        // Update UI with Response
+        const loadingBubble = document.getElementById(loadingId);
+        if (response.ok) {
+            loadingBubble.innerText = data.answer;
+        } else {
+            loadingBubble.innerText = "Oops, I'm having trouble connecting to my brain right now.";
+            console.error("AI Error:", data.error);
+        }
+    } catch (error) {
+        document.getElementById(loadingId).innerText = "Network error. Please try again.";
+        console.error("Network Error:", error);
+    }
+}
+
+function appendMessage(text, sender, bubbleId = null) {
+    const chatBody = document.getElementById('chat-body');
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `message ${sender}-message`;
+    
+    const icon = sender === 'ai' ? '<i class="fa-solid fa-robot"></i>' : '<i class="fa-solid fa-user"></i>';
+    const idAttr = bubbleId ? `id="${bubbleId}"` : '';
+
+    msgDiv.innerHTML = `
+        <div class="avatar">${icon}</div>
+        <div class="bubble" ${idAttr}>${text}</div>
+    `;
+    
+    chatBody.appendChild(msgDiv);
+    chatBody.scrollTop = chatBody.scrollHeight; // Auto-scroll to bottom
+}
+
+// Helper to grab Django CSRF token from cookies
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}

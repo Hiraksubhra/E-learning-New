@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.views.decorators.cache import never_cache
 
 from .models import AIQuiz, Course, StudentProfile, QuizResult
-from .ai_service import generate_quiz_json
+from .ai_service import generate_quiz_json, ask_video_context
 
 from .utils import (
     calculate_cosine_similarity,
@@ -58,6 +58,26 @@ class GenerateQuizView(APIView):
             "questions": data['questions']
         }, status=201)
 
+@method_decorator(csrf_exempt, name='dispatch')
+class AskBuddyView(APIView):
+    # Only allow logged-in users to use the AI
+    permission_classes = [IsAuthenticated] 
+
+    def post(self, request):
+        question = request.data.get('question')
+        context = request.data.get('context')
+
+        if not question:
+            return Response({"error": "Question is required"}, status=400)
+
+        # Call the new AI function
+        answer = ask_video_context(question, context)
+
+        if not answer:
+            return Response({"error": "AI failed to generate a response."}, status=500)
+
+        return Response({"answer": answer}, status=200)
+    
 @login_required(login_url='login_page')
 def dashboard(request):
     user_profile, created = StudentProfile.objects.get_or_create(user=request.user)
@@ -154,6 +174,7 @@ def course_player(request, course_slug):
         'course': course,  
         'course_data': json.dumps(course_data)
     })
+    
 
 def login_page(request):
     if request.user.is_authenticated:

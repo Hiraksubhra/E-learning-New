@@ -5,9 +5,15 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
+api_key = os.getenv("GEMINI_API_KEY")
+print("\n" + "="*30)
+print(f"DEBUG: Key Starts With : {str(api_key)[:10]}")
+print(f"DEBUG: Key Ends With   : {str(api_key)[-5:]}")
+print(f"DEBUG: Key Length      : {len(str(api_key))}")
+print("="*30 + "\n")
 
 # Initialize the NEW client
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+client = genai.Client(api_key=api_key)
 
 def generate_quiz_json(topic, difficulty):
     # Map the difficulty to specific prompting instructions so the AI knows exactly what it means
@@ -69,4 +75,39 @@ def get_text_embedding(text):
         return result.embeddings[0].values
     except Exception as e:
         print(f"Error generating embedding for '{text}': {e}")
+        return None
+
+def ask_video_context(question, context):
+    """Answers a user's question strictly based on the provided video transcript."""
+    try:
+        # If the video has no transcript in the database, handle it gracefully
+        if not context or context.strip() == "":
+            context = "No transcript available for this video."
+
+        prompt = f"""
+        You are a friendly, encouraging AI Study Buddy for an e-learning platform. 
+        Your job is to help the student understand the current video lesson.
+        
+        CRITICAL RULE: Answer the student's question using ONLY the information found in the TRANSCRIPT below. 
+        If the answer cannot be found in the transcript, do not make things up. Instead, politely say: 
+        "I'm sorry, but the instructor doesn't seem to cover that specific detail in this video."
+        
+        TRANSCRIPT:
+        {context}
+        
+        STUDENT'S QUESTION:
+        {question}
+        
+        Keep your answer concise, easy to read, and educational.
+        """
+
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt,
+        )
+        
+        return response.text
+
+    except Exception as e:
+        print(f"Error generating study buddy response: {e}")
         return None

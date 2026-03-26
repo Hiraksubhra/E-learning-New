@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import GenerateQuizView
+from .views import GenerateQuizView, AskBuddyView
 from . import views
 
 urlpatterns = [
@@ -16,6 +16,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout_view'),
 
     path('generate-quiz/', GenerateQuizView.as_view(), name='generate-quiz'),
+    path('ask-buddy/', AskBuddyView.as_view(), name='ask_buddy'),
     path('save-result/', views.save_quiz_result, name='save_result'),
     path('history/', views.get_quiz_history, name='quiz_history'),
     path('course/<slug:course_slug>/', views.course_player, name='course_player'),
