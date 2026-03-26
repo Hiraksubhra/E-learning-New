@@ -246,7 +246,14 @@ def analytics(request):
     return render(request, 'analytics.html')
 
 def settings(request):
-    return render(request, 'settings.html')
+    username = request.user.username
+    parts = username.split('_')
+    
+    context = {
+        'first_name': parts[0].title(),
+        'last_name': parts[1].title() if len(parts) > 1 else ""
+    }
+    return render(request, 'settings.html', context)
 
 def about(request):
     return render(request, 'about.html')

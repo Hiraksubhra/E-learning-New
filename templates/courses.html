@@ -19,9 +19,11 @@
             </div>
 
             <div class="user-profile-side">
-                <div class="avatar-circle">JD</div>
+                <!-- This extracts the very first letter of their username and capitalizes it! -->
+                <div class="avatar-circle">{{ request.user.username|make_list|first|upper }}</div>
                 <div>
-                    <div class="user-name">John Doe</div>
+                    <!-- Dynamically displays their actual username -->
+                    <div class="user-name">{{ request.user.username }}</div>
                     <div class="user-role">Student Account</div>
                 </div>
             </div>
