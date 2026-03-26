@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Featured Courses | e-learning</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/courses_home.css' %}">
+</head>
+<body>
+
+    <div id="page-landing">
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-pen-nib"></i> 
+                    e-learning
+                </div>
+
+                <ul class="nav-links">
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'about' %}">About us</a></li>
+                    <li><a href="#" class="active">Courses</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                </ul>
+
+                <a href="{% url 'login_page' %}" class="btn btn-orange">Log In</a>
+            </nav>
+        </div>
+    </div>
+
+    <section class="featured-courses">
+        <div class="container">
+            <div class="section-header">
+                <h4 class="subtitle">Find a Course</h4>
+                <h2 class="title">Featured Courses</h2>
+                <div class="title-underline"></div>
+            </div>
+
+            <div class="courses-grid">
+                
+                <div class="course-card">
+                    <div class="course-image">
+                        <img src="https://placehold.co/350x250/1D2939/FF6636?text=Web+Design" alt="Web Design Course">
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">Web Design Course</h3>
+                            <p class="course-description">Master responsive web design with HTML5, CSS3, and modern frameworks. Create stunning, mobile-first websites that provide exceptional user experiences across all devices.</p>
+
+                            <a href="#" class="btn btn-secondary view-more-btn"
+                            data-title="Web Design Mastery"
+                            data-desc="Transform from beginner to professional web designer in this comprehensive, project-based course. You'll master HTML5 semantic structure, advanced CSS3 animations, CSS Grid, Flexbox, and responsive design principles. Build a complete portfolio including a modern business website, an interactive landing page, and a mobile-first e-commerce interface. Learn industry-standard tools like Figma for design, VS Code for development, and Git for version control. By course end, you'll have 5 professional websites to showcase to employers and clients."
+                            data-difficulty="Intermediate"
+                            data-duration="10 Weeks"
+                            data-instructor="Michael Chen"
+                            data-img="https://placehold.co/350x250/1D2939/FF6636?text=Web+Design+Mastery">
+                            MORE
+                            </a>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-image">
+                         <img src="https://placehold.co/350x250/1D2939/FF6636?text=Python+Intro" alt="Python for Beginners">
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">Python for Beginners</h3>
+                        <p class="course-description">Start your coding journey with Python - the world's most beginner-friendly programming language. No prior experience required!</p>
+
+                        <a href="#" class="btn btn-secondary view-more-btn"
+                        data-title="Python for Beginners"
+                        data-desc="Launch your programming career with our step-by-step Python course designed specifically for complete beginners. Start from absolute zero - we'll teach you how to install Python, write your first 'Hello World' script, and gradually build up to creating real applications. Master variables, data types, loops, functions, and object-oriented programming through 50+ hands-on exercises and 3 complete projects: a password generator, a data analysis tool, and a text-based adventure game. You'll also learn how to debug code, work with external libraries, and prepare for Python certification exams. Perfect for career changers, students, and self-taught enthusiasts."
+                        data-difficulty="Beginner"
+                        data-duration="8 Weeks"
+                        data-instructor="David Kim"
+                        data-img="https://placehold.co/350x250/1D2939/FF6636?text=Python+For+Beginners">
+                        MORE
+                        </a>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-image">
+                         <img src="https://placehold.co/350x250/1D2939/FF6636?text=Data+Science" alt="Data Science Essentials">
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">Data Science Essentials</h3>
+                        <p class="course-description">Turn raw data into powerful insights. Learn Python-based data analysis, visualization, and machine learning techniques used by Fortune 500 companies.</p>
+
+                        <a href="#" class="btn btn-secondary view-more-btn"
+                        data-title="Data Science Essentials"
+                        data-desc="Unlock the power of data science with our intensive, hands-on curriculum designed for aspiring analysts and career switchers. Master the complete data science workflow: data collection, cleaning, exploration, visualization, and predictive modeling. Work extensively with pandas for data manipulation, numpy for numerical computing, matplotlib and seaborn for stunning visualizations, and scikit-learn for implementing machine learning algorithms. Learn from practicing data scientists and gain experience with Jupyter Notebooks, Google Colab, and Kaggle competitions. By course completion, you'll have a professional data science portfolio and the skills to pass technical interviews."
+                        data-difficulty="Advanced"
+                        data-duration="14 Weeks"
+                        data-instructor="Dr. Amanda Foster"
+                        data-img="https://placehold.co/350x250/1D2939/FF6636?text=Data+Science+Essentials">
+                        MORE
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <div id="courseModal" class="modal-overlay">
+        <div class="modal-card">
+            <button class="close-btn">&times;</button>
+            <div class="modal-image">
+                <img id="modalImg" src="" alt="Course Image">
+            </div>
+            <div class="modal-content">
+                <h3 id="modalTitle">Course Title</h3>
+                <p id="modalDesc">Full description goes here.</p>
+                
+                <div class="modal-meta">
+                    <span><i class="fas fa-signal"></i> <span id="modalDiff"></span></span>
+                    <span><i class="fas fa-clock"></i> <span id="modalDur"></span></span>
+                    <span><i class="fas fa-chalkboard-teacher"></i> <span id="modalInst"></span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/courses_home.js' %}"></script>
+</body>
+</html>

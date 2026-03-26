@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="origin" />
+    <title>{{ course.title }} | E-Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/player.css' %}?v={% now 'U' %}">
+</head>
+<body>
+
+    <nav class="player-nav">
+        <div class="nav-left">
+            <a href="{% url 'dashboard' %}" class="back-btn">
+                <i class="fa-solid fa-chevron-left"></i> Back to Dashboard
+            </a>
+            <span class="divider">|</span>
+            <h1 id="courseTitle">Loading...</h1>
+        </div>
+        <div class="nav-right">
+            <div class="progress-container">
+                <span>Your Progress:</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <span class="percentage">0%</span>
+            </div>
+            <button class="btn-share"><i class="fa-solid fa-share-nodes"></i> Share</button>
+        </div>
+    </nav>
+
+    <div class="player-container">
+        
+        <main class="video-section">
+            <div class="player-card">
+                <div class="video-wrapper">
+                    <iframe id="mainPlayer" src="" 
+                        title="YouTube video player" frameborder="0" 
+                        referrerpolicy="strict-origin-when-cross-origin" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+
+                <div class="lesson-details">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h2 id="lessonTitle">Select a lesson to start</h2>
+                        <!-- Parth's future Mark as Complete button can go here! -->
+                    </div>
+                    <div class="meta-row">
+                        <span id="instructorName">Instructor</span>
+                        <span class="dot">•</span>
+                        <span id="lessonDuration">--:--</span>
+                    </div>
+                    <hr>
+                    <div class="description">
+                        <h3>About this lesson</h3>
+                        <p id="lessonDescription">Lesson description will appear here.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <aside class="playlist-sidebar">
+            <div class="sidebar-header">
+                <h3>Course Content</h3>
+            </div>
+            <div class="modules-container" id="playlistContainer">
+                </div>
+        </aside>
+
+    </div>
+
+    <script>
+        // The 'safe' filter is CRITICAL. It prevents Django from escaping quotes.
+        const courseData = JSON.parse("{{ course_data|escapejs }}");
+    </script>
+    
+    <script src="{% static 'js/player.js' %}?v={% now 'U' %}"></script>
+</body>
+</html>

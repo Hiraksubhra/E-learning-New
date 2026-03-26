@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Learning | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}?v={% now 'U' %}">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fas fa-pen-nib"></i> <span>e-learning</span>
+            </div>
+
+            <div class="user-profile-side">
+                <div class="avatar-circle">JD</div>
+                <div>
+                    <div class="user-name">John Doe</div>
+                    <div class="user-role">Student Account</div>
+                </div>
+            </div>
+
+            <div class="menu-label">Main Menu</div>
+            <ul class="side-menu">
+                <li>
+                    <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'courses' %}" class="{% if request.resolver_match.url_name == 'courses' %}active{% endif %}">
+                        <i class="fas fa-book-open"></i> My Courses
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'analytics' %}" class="{% if request.resolver_match.url_name == 'analytics' %}active{% endif %}">
+                        <i class="fas fa-chart-pie"></i> Analytics
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'settings' %}" class="{% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                </li>
+            </ul>
+
+            <div class="menu-label" style="margin-top: auto;">Actions</div>
+            <ul class="side-menu">
+                <li><a href="{% url 'logout_view' %}" class="logout-link"><i class="fas fa-sign-out-alt"></i> Log Out</a></li>
+            </ul>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            
+            <!-- TOP BAR -->
+            <div class="top-bar">
+                <div class="ai-search-box">
+                    <i class="fas fa-magic"></i>
+                    <input type="text" id="videoUrlInput" placeholder="Learn about any topic...">
+                    <button onclick="generateLesson()">Generate</button>
+                    <button onclick="openHistory()" class="btn-sm" style="background-color: #6C63FF; color: white; margin-left: 10px;">📜 Quiz History</button>
+                </div>
+
+                <div class="top-icons">
+                    <div class="icon-badge"><i class="far fa-bell"></i><span></span></div>
+                    <div class="icon-badge"><i class="far fa-envelope"></i></div>
+                </div>
+            </div>
+
+            <div class="content-wrapper">
+                <h2>Account Overview</h2>
+
+                <!-- STATS ROW -->
+                <div class="stats-grid">
+                    <div class="stat-card green">
+                        <div class="icon"><i class="fas fa-book"></i></div>
+                        <div class="num"> 4</div>
+                        <div class="label">Courses</div>
+                    </div>
+                    <div class="stat-card purple">
+                        <div class="icon"><i class="fas fa-clock"></i></div>
+                        <div class="num">34h</div>
+                        <div class="label">Learning Time</div>
+                    </div>
+                    <div class="stat-card orange">
+                        <div class="icon"><i class="fas fa-star"></i></div>
+                        <div class="num">4.8</div>
+                        <div class="label">Avg Score</div>
+                    </div>
+                    <div class="stat-card blue">
+                        <div class="icon"><i class="fas fa-award"></i></div>
+                        <div class="num">3</div>
+                        <div class="label">Certificates</div>
+                    </div>
+                </div>
+
+                <!-- RECENT COURSES HEADER -->
+                <div class="section-header">
+                    <h3>Your AI-Curated Lessons</h3>
+                    <a href="#">View All</a>
+                </div>
+
+                <!-- COURSES GRID -->
+                <div class="courses-grid" id="courseGrid">
+                    
+                    {% for course in recommended_courses %}
+                    
+                    <div class="course-card">
+                        <div class="thumbnail">
+                            <img src="{{ course.thumbnail|default:'https://placehold.co/350x250/1D2939/FF6636?text=Course' }}" alt="thumb">
+                            <span class="badge" style="background: #2ecc71;">Recommended for You</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="fill" style="--progress: {{ course.progress_percentage|default:0 }}%;"></div>
+                                </div>
+                            <span>{{ course.progress_percentage|default:0 }}%</span>
+                            </div>
+                            <h4>{{ course.title }}</h4>
+                            <p>By {{ course.instructor }}</p>
+                            
+                            <a href="{% url 'course_player' course.slug %}" class="btn-start-learning">
+                                Start Learning
+                            </a>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: white; border-radius: 12px; border: 1px dashed #ccc;">
+                        <i class="fas fa-robot" style="font-size: 40px; color: #6C63FF; margin-bottom: 15px;"></i>
+                        <h4>Your AI Profile is Empty!</h4>
+                        <p>Complete a course or take a quiz so I can learn your preferences and recommend your next steps.</p>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- LOADING OVERLAY -->
+    <div id="ai-overlay" class="overlay hidden">
+        <div class="spinner"></div>
+        <h3>AI is Thinking...</h3>
+        <p>Extracting transcript • Summarizing • Generating Quiz</p>
+    </div>
+    <script>
+    const CSRF_TOKEN = "{{ csrf_token }}"; 
+    </script>
+    <!-- Link to the new separate JS file -->
+    <script src="{% static 'js/dashboard.js' %}?v=3"></script>
+
+    <div id="quiz-modal" class="overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="quiz-title">Quiz Title</h3>
+                <span class="close-btn" onclick="closeQuiz()">×</span>
+            </div>
+            <div class="modal-body" id="quiz-body">
+                <h4 id="question-text">Question goes here...</h4>
+                <div class="options-grid" id="options-container">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <span id="quiz-progress">Question 1 of 5</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

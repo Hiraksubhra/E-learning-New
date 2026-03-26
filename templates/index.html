@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Learning AI Support</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=1">
+</head>
+<body>
+
+    <div id="page-landing">
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-pen-nib"></i> 
+                    e-learning
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="{% url 'about' %}">About us</a></li>
+                    <li><a href="{% url 'courses_home' %}">Courses</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                </ul>
+                <a href="{% url 'login_page' %}" class="btn btn-orange">Log In</a>
+            </nav>
+
+            <div class="hero-section">
+                <div class="hero-text">
+                    <h1>Spread Your <span>Skills</span><br>Around The World</h1>
+                    <p>Confidence in skills with experienced mentors and updated curriculum. Our AI-driven support system is ready to advance your career.</p>
+                    
+                    <div class="search-box">
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            placeholder="Search for your course" 
+                            onkeyup="filterCourses()" 
+                        >
+                        <button><i class="fas fa-search"></i></button>
+                    </div>
+
+                    <div class="course-list">
+                        <div class="course-item">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <i class="fas fa-book-open"></i> <h3>Web Development</h3>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #ccc; font-size: 12px;"></i>
+                        </div>
+
+                        <div class="course-item">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <i class="fas fa-chart-bar"></i> <h3>Data Science</h3>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #ccc; font-size: 12px;"></i>
+                        </div>
+                        <div class="course-item">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <i class="fab fa-python"></i> 
+                                <h3>Python for Beginners</h3>
+                            </div>
+                            <i class="fas fa-chevron-right" style="color: #ccc; font-size: 12px;"></i>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 30px; display: flex; gap: 15px;">
+                        <a href="{% url 'courses_home' %}" class="btn btn-orange">Browse Courses</a>
+                        <button class="btn btn-outline">Join Free Seminar</button>
+                    </div>
+                </div>
+
+                <div class="hero-image">
+                    <div class="illustration-circle">
+                        <i class="fas fa-graduation-cap" style="font-size: 80px; color: var(--primary-orange); opacity: 0.8;"></i>
+                        
+                        <div class="floating-card card-1">
+                            <i class="fas fa-check-circle" style="color: #2ECC71;"></i>
+                            <div>
+                                <strong>Active</strong>
+                                <div style="font-size: 12px; color: #666;">500+ Students</div>
+                            </div>
+                        </div>
+                        <div class="floating-card card-2">
+                            <i class="fas fa-video" style="color: var(--primary-orange);"></i>
+                            <div>
+                                <strong>Video</strong>
+                                <div style="font-size: 12px; color: #666;">High Quality</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function filterCourses() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.querySelectorAll('.course-item');
+            cards.forEach(card => {
+                let text = card.innerText.toLowerCase();
+                if (input !== "" && text.includes(input)) {
+                    card.style.display = "flex"; // show the item
+                } else {
+                    card.style.display = "none";  // Hide if no match or if input is empty
+                }
+            });
+        }
+    </script>
+</body>
+</html>

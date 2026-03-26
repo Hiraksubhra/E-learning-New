@@ -1,0 +1,226 @@
+:root {
+    --primary-orange: #FF6636;
+    --primary-hover: #E55A2F;
+    --dark-text: #1D2939;
+    --light-text: #667085;
+    --bg-color: #FFFDFC;
+    --bg-cream: #FFF8F3;
+    --white: #FFFFFF;
+    --border-color: #E9EAF0;
+    --input-bg: #F4F6F8; /* Added for the light form inputs from reference image */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+    background-color: var(--bg-cream); /* Changed slightly to make the white card pop */
+    color: var(--dark-text);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* =========================================
+   SHARED UTILITY CLASSES
+   ========================================= */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 15px;
+    display: inline-block;
+}
+
+.btn-orange {
+    background-color: var(--primary-orange);
+    color: var(--white);
+}
+
+.btn-orange:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 102, 54, 0.3);
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+    border-radius: 30px; /* Matched the pill-shape from the image */
+}
+
+/* =========================================
+   NAVIGATION BAR
+   ========================================= */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    background-color: transparent;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav .logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--dark-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+nav .logo i {
+    color: var(--primary-orange);
+}
+
+nav .nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+nav .nav-links a {
+    color: var(--dark-text);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+nav .nav-links a:hover {
+    color: var(--primary-orange);
+}
+
+/* =========================================
+   CONTACT PAGE SPECIFICS
+   ========================================= */
+.contact-section {
+    padding: 60px 0 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-card {
+    background-color: var(--white);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.contact-form-container {
+    flex: 1;
+    padding: 60px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.contact-form-container h2 {
+    font-size: 32px;
+    color: var(--dark-text);
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* Input Group Styles (Based on Image Reference) */
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-group i {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    color: var(--light-text);
+    font-size: 16px;
+}
+
+/* Form Elements */
+.contact-form select,
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    background-color: var(--input-bg);
+    border: 2px solid transparent;
+    border-radius: 30px; /* Pill shape from image */
+    padding: 16px 20px 16px 50px; /* Left padding makes room for the icon */
+    font-size: 15px;
+    color: var(--dark-text);
+    outline: none;
+    transition: all 0.3s ease;
+    appearance: none; /* Removes default dropdown arrow to style better */
+}
+
+/* Textarea doesn't need an icon based on the design */
+.contact-form textarea {
+    padding-left: 20px; 
+    border-radius: 20px;
+    resize: vertical;
+}
+
+.contact-form select:focus,
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: var(--primary-orange);
+    background-color: var(--white);
+}
+
+/* Specific fix for select dropdown arrow */
+.contact-form select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23667085%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 20px top 50%;
+    background-size: 12px auto;
+}
+
+/* Arbitrary email state */
+.contact-form input[readonly] {
+    color: var(--light-text);
+    cursor: not-allowed;
+}
+
+/* Right Side Illustration */
+.contact-illustration {
+    flex: 1;
+    background-color: var(--bg-cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-left: 1px solid var(--border-color);
+}
+
+.contact-illustration img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+}

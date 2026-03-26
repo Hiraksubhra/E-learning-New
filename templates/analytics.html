@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Learning | Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fas fa-pen-nib"></i> <span>e-learning</span>
+            </div>
+
+            <div class="user-profile-side">
+                <div class="avatar-circle">JD</div>
+                <div>
+                    <div class="user-name">John Doe</div>
+                    <div class="user-role">Student Account</div>
+                </div>
+            </div>
+
+            <div class="menu-label">Main Menu</div>
+            <ul class="side-menu">
+                <li>
+                    <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'courses' %}" class="{% if request.resolver_match.url_name == 'courses' %}active{% endif %}">
+                        <i class="fas fa-book-open"></i> My Courses
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'analytics' %}" class="{% if request.resolver_match.url_name == 'analytics' %}active{% endif %}">
+                        <i class="fas fa-chart-pie"></i> Analytics
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'settings' %}" class="{% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                </li>
+            </ul>
+
+            <div class="menu-label" style="margin-top: auto;">Actions</div>
+            <ul class="side-menu">
+                <li><a href="{% url 'logout_view' %}" class="logout-link"><i class="fas fa-sign-out-alt"></i> Log Out</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-bar">
+                <h3 style="margin-right: auto;">Performance Overview</h3>
+                <div class="top-icons">
+                    <div class="icon-badge"><i class="far fa-calendar"></i></div>
+                    <div class="icon-badge"><i class="far fa-bell"></i></div>
+                </div>
+            </div>
+
+            <div class="content-wrapper">
+                
+                <div class="stats-grid">
+                    <div class="stat-card green">
+                        <div class="icon"><i class="fas fa-fire"></i></div>
+                        <div class="num">7 Days</div>
+                        <div class="label">Current Streak</div>
+                    </div>
+                    <div class="stat-card purple">
+                        <div class="icon"><i class="fas fa-clock"></i></div>
+                        <div class="num">12h</div>
+                        <div class="label">Hours this Week</div>
+                    </div>
+                    <div class="stat-card blue">
+                        <div class="icon"><i class="fas fa-trophy"></i></div>
+                        <div class="num">1,250</div>
+                        <div class="label">XP Points</div>
+                    </div>
+                </div>
+
+                <div class="section-header" style="margin-top: 30px;">
+                    <h3>Skill Proficiency</h3>
+                </div>
+
+                <div class="courses-grid">
+                    
+                    <div class="course-card">
+                        <div class="card-body" style="padding: 20px;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                                <h4><i class="fab fa-js" style="color:#f7df1e;"></i> JavaScript</h4>
+                                <span>Advanced</span>
+                            </div>
+                            <div class="progress-container">
+                                <div class="progress-bar"><div class="fill" style="width: 75%"></div></div>
+                                <span>75%</span>
+                            </div>
+                            <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
+                                You are in the top 10% of students.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="card-body" style="padding: 20px;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                                <h4><i class="fab fa-python" style="color:#306998;"></i> Python</h4>
+                                <span>Intermediate</span>
+                            </div>
+                            <div class="progress-container">
+                                <div class="progress-bar"><div class="fill" style="width: 45%"></div></div>
+                                <span>45%</span>
+                            </div>
+                            <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
+                                2 more modules to reach Advanced.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="card-body" style="padding: 20px;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                                <h4><i class="fab fa-html5" style="color:#e34c26;"></i> HTML/CSS</h4>
+                                <span>Master</span>
+                            </div>
+                            <div class="progress-container">
+                                <div class="progress-bar"><div class="fill" style="width: 95%; background: #2ecc71;"></div></div>
+                                <span>95%</span>
+                            </div>
+                             <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
+                                You have completed all available tracks.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
