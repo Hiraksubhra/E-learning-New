@@ -2,7 +2,8 @@
 
 A modern, intelligent e-learning platform built with Django and vanilla JavaScript. Moving beyond traditional "digital filing cabinets" for videos, this platform natively integrates Google's Gemini AI to provide semantic curriculum matching, real-time knowledge profiling, and context-aware tutoring.
 
-🚀 Key Innovative Features
+🚀 Key Innovative Features:
+
 Semantic Curriculum Matching (Vector Embeddings):
 Traditional platforms rely on rigid keyword tags. Our system uses the gemini-embedding-001 model to convert course transcripts and descriptions into high-dimensional mathematical vectors. By plotting both the course content and the student's knowledge state (learning_vector) in the same concept space, the platform serves personalized course recommendations using Cosine Similarity.
 
