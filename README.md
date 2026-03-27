@@ -1,25 +1,30 @@
 # AI-Powered E-Learning Platform 🎓🤖
 
-An intelligent Learning Management System (LMS) built with Django that leverages Google's Gemini AI to dynamically generate quizzes, track student knowledge states, and provide personalized course recommendations using semantic embeddings.
+A modern, intelligent e-learning platform built with Django and vanilla JavaScript. Moving beyond traditional "digital filing cabinets" for videos, this platform natively integrates Google's Gemini AI to provide semantic curriculum matching, real-time knowledge profiling, and context-aware tutoring.
 
-## ✨ Key Features
+🚀 Key Innovative Features
+Semantic Curriculum Matching (Vector Embeddings):
+Traditional platforms rely on rigid keyword tags. Our system uses the gemini-embedding-001 model to convert course transcripts and descriptions into high-dimensional mathematical vectors. By plotting both the course content and the student's knowledge state (learning_vector) in the same concept space, the platform serves personalized course recommendations using Cosine Similarity.
 
-* **AI Quiz Generation:** Instantly generate custom 5-question quizzes on any topic using the `gemini-2.5-flash` model.
-* **Dynamic Difficulty Adjustment (DDA):** Quizzes automatically scale in difficulty (Beginner, Intermediate, Advanced) based on the user's past performance in that specific topic, or can be manually overridden via user settings.
-* **Vector-Based Recommendations:** Uses `gemini-embedding-001` to map both course content and user knowledge into mathematical vectors. The dashboard calculates Cosine Similarity to recommend the top 4 courses best suited to the user's current learning state.
-* **Progress Tracking:** Tracks completed video lessons and visualizes course completion percentages on the dashboard.
-* **Quiz History:** Saves detailed quiz results to a MongoDB database, allowing users to review their past scores and performance over time.
-* **Custom User Profiles:** Extends the default Django User model to store complex AI-specific data (like the `learning_vector` array) without needing a custom user model.
+Context-Bounded AI "Study Buddy" (RAG Architecture):
+A built-in chat widget that acts as a localized Teaching Assistant. Using Retrieval-Augmented Generation (RAG), the frontend secretly passes the exact transcript of the currently playing video to the Gemini API alongside the user's question. This forces the AI to answer strictly based on the lesson's context, eliminating AI hallucinations.
 
-## 🛠️ Tech Stack
+Dynamic Knowledge Profiling & Adaptive Quizzes:
+Instead of static, hardcoded tests, the platform generates tailored quizzes on the fly based on the user's current competency level (Beginner, Intermediate, Advanced). Real-time quiz scores mathematically shift the student's 3D knowledge profile, creating a continuous feedback loop of their actual understanding.
 
-* **Backend:** Python, Django, Django REST Framework (DRF)
-* **Database:** MongoDB (via Djongo/NoSQL adapter) & SQLite (Default Django)
-* **AI Integration:** Google GenAI SDK (Gemini API)
-* **Frontend:** HTML5, CSS3, Vanilla JavaScript (Fetch API, LocalStorage)
-* **Math/Calculations:** NumPy (for vector operations)
+Seamless Real-Time Progress Tracking:
+A frictionless learning experience. As users complete videos, the vanilla JavaScript frontend syncs asynchronously with the Django backend, updating progress bars and completion checkmarks instantly without requiring page reloads.
 
-## 🚀 Getting Started
+🛠️ Tech Stack
+Backend: Python, Django, Django REST Framework
+
+AI Integration: Google Gemini API (gemini-embedding-001 and generative models)
+
+Frontend: Vanilla JavaScript, HTML5, CSS3 (Modern Flexbox/Grid layouts)
+
+Database: SQLite (default) / PostgreSQL (production ready)
+
+Icons & Assets: FontAwesome
 
 ### Prerequisites
 Make sure you have the following installed on your machine:
