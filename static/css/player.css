@@ -37,39 +37,33 @@ body { height: 100vh; display: flex; flex-direction: column; overflow: hidden; b
 .btn-share { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 5px 12px; border-radius: 4px; cursor: pointer; transition: 0.2s;}
 .btn-share:hover { background: rgba(255,255,255,0.1); }
 
-/* Layout Grid */
+
 .player-container {
     display: flex;
     flex: 1;
     overflow: hidden; 
-    padding: 25px; /* Added breathing room around the whole layout */
-    gap: 25px; /* Space between video and sidebar */
+    padding: 25px; 
+    gap: 25px; 
     background-color: var(--bg-light); 
+    min-height: 0; 
 }
 
-/* Video Section (Left) */
 .video-section {
     flex: 1;
     overflow-y: auto; 
-    /* Removed the black background */
     display: flex;
     flex-direction: column;
-}
-
-/* New Modern Wrapper */
-.player-card {
-    background: var(--white);
+    height: 100%; 
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-    overflow: hidden; /* Keeps the iframe inside the rounded corners */
 }
 
 .video-wrapper {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-    height: 0;
-    background: black;
     width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: 65vh;
+    background: black;
+    flex-shrink: 0; 
 }
 
 .video-wrapper iframe {
@@ -147,6 +141,8 @@ hr { border: 0; border-top: 1px solid var(--border-color); margin: 20px 0; }
     border-left: 4px solid var(--primary-orange);
 }
 
+
+
 .status-icon {
     color: #ccc;
     font-size: 0.9rem;
@@ -154,6 +150,7 @@ hr { border: 0; border-top: 1px solid var(--border-color); margin: 20px 0; }
 }
 
 .lesson-item.active .status-icon { color: var(--primary-orange); }
+.lesson-item.active .status-icon.fa-circle-check { color: #2ecc71 !important; }
 
 .lesson-info h4 {
     font-size: 0.9rem;

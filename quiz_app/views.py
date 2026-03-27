@@ -12,7 +12,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.views.decorators.cache import never_cache
 
-from .models import AIQuiz, Course, StudentProfile, QuizResult
+from .models import AIQuiz, Course, StudentProfile, QuizResult, Lesson
 from .ai_service import generate_quiz_json, ask_video_context
 
 from .utils import (
@@ -167,13 +167,63 @@ def course_player(request, course_slug):
         "title": course.title,
         "instructor": course.instructor,
         "description": course.description,
-        "modules": modules_list, 
+        "modules": modules_list,
+        "id":course.id, 
+        "completed_lessons": list(request.user.profile.completed_lessons),
     }
 
     return render(request, 'player.html', {
         'course': course,  
         'course_data': json.dumps(course_data)
     })
+
+@csrf_exempt
+@login_required(login_url='login_page')
+# Make sure this import is at the top of views.py!
+# from .models import Course, Lesson, StudentProfile
+
+@csrf_exempt
+@login_required(login_url='login_page')
+def mark_lesson_complete(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            lesson_id = data.get('lesson_id')
+            course_id = data.get('course_id')
+
+            profile = request.user.profile
+            
+            if not isinstance(profile.completed_lessons, list):
+                profile.completed_lessons = []
+                
+            current_completed = list(profile.completed_lessons)
+            
+            if lesson_id not in current_completed:
+                current_completed.append(lesson_id)
+                # Overwrite the old field with the new list
+                profile.completed_lessons = current_completed
+                profile.save()
+            
+            # Calculate new course progress percentage
+            course = Course.objects.get(id=course_id)
+            total_lessons = Lesson.objects.filter(module__course=course).count()
+            
+            course_lesson_ids = Lesson.objects.filter(module__course=course).values_list('id', flat=True)
+            
+            # Calculate intersection of what they've finished vs what is in this course
+            completed_count = len(set(profile.completed_lessons).intersection(set(course_lesson_ids)))
+
+            progress = int((completed_count / total_lessons) * 100) if total_lessons > 0 else 0
+
+            return JsonResponse({'status': 'success', 'progress': progress})
+            
+        except Exception as e:
+            # --- THE SMOKING GUN ---
+            # This will print the exact Python crash reason to your terminal
+            print(f"CRASH IN MARK_COMPLETE: {e}") 
+            return JsonResponse({'error': str(e)}, status=400)
+            
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login

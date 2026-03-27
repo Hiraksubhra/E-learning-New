@@ -1,4 +1,6 @@
 let currentLessonTranscript = "";
+let currentLessonId = null;
+let currentCourseId = courseData.id || null;
 const player = document.getElementById('mainPlayer');
 const lessonTitle = document.getElementById('lessonTitle');
 const lessonDesc = document.getElementById('lessonDescription');
@@ -41,8 +43,12 @@ function initPlayer() {
 }
 
 // Render the Sidebar (Modules & Lessons)
+// Render the Sidebar (Modules & Lessons)
 function renderPlaylist() {
     playlistContainer.innerHTML = '';
+
+    // 1. Grab the completed list at the top of the function
+    const completedList = courseData.completed_lessons || [];
 
     courseData.modules.forEach((module, index) => {
         // We'll keep the first module open by default, others collapsed
@@ -77,8 +83,16 @@ function renderPlaylist() {
                     loadLesson(lesson);
                 };
 
+                // 2. Check if this specific lesson is completed
+                const isCompleted = completedList.includes(lesson.id);
+
+                // 3. Dynamically assign the icon class and color
+                const iconClass = isCompleted ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle-play';
+                const iconStyle = isCompleted ? 'color: #2ecc71;' : '';
+
+                // 4. Update the HTML template string
                 li.innerHTML = `
-                    <i class="fa-regular fa-circle-play status-icon"></i>
+                    <i class="${iconClass} status-icon" style="${iconStyle}"></i>
                     <div class="lesson-info">
                         <h4>${lesson.title}</h4>
                         <span><i class="fa-regular fa-clock"></i> ${lesson.duration || '--:--'}</span>
@@ -114,6 +128,13 @@ function loadLesson(lesson) {
     lessonDesc.innerText = lesson.content || "No description available for this lesson.";
     lessonDuration.innerText = lesson.duration || "--:--";
     currentLessonTranscript = lesson.content || "";
+    currentLessonId = lesson.id;
+    currentLessonTranscript = lesson.content || "";
+
+    const btn = document.getElementById('markCompleteBtn');
+    btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Mark as Complete';
+    btn.style.background = '#2ecc71';
+    btn.disabled = false;
 }
 
 // Start the player
@@ -207,3 +228,93 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+async function markLessonAsComplete() {
+    if (!currentLessonId) return;
+
+    const btn = document.getElementById('markCompleteBtn');
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+    btn.disabled = true;
+    
+    console.log("Sending payload:", { lesson_id: currentLessonId, course_id: currentCourseId });
+
+    try {
+        const response = await fetch('/api/mark-complete/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                lesson_id: currentLessonId,
+                course_id: currentCourseId 
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Update the Button UI
+            btn.innerHTML = '<i class="fa-solid fa-check-double"></i> Completed';
+            btn.style.background = '#95a5a6'; // Gray out button
+            
+            // Update the Sidebar Icon
+            const activeLessonIcon = document.querySelector('.lesson-item.active .status-icon');
+            if (activeLessonIcon) {
+                activeLessonIcon.classList.remove('fa-regular', 'fa-circle-play');
+                activeLessonIcon.classList.add('fa-solid', 'fa-circle-check');
+                activeLessonIcon.style.color = '#2ecc71';
+            }
+
+            // Update the Top Progress Bar
+            if (data.progress !== undefined) {
+                document.querySelector('.progress-fill').style.width = `${data.progress}%`;
+                document.querySelector('.percentage').innerText = `${data.progress}%`;
+            }
+        }
+    } catch (error) {
+        console.error("Error marking complete:", error);
+        btn.innerHTML = 'Error. Try Again.';
+        btn.disabled = false;
+    }
+}
+
+// INITIALIZE PROGRESS ON PAGE LOAD
+document.addEventListener("DOMContentLoaded", () => {
+    // Get the completed lessons from the Django backend
+    const completedList = courseData.completed_lessons || [];
+    
+    // Calculate the initial progress bar
+    let totalLessons = 0;
+    let completedInThisCourse = 0;
+    
+    courseData.modules.forEach(module => {
+        module.lessons.forEach(lesson => {
+            totalLessons++;
+            if (completedList.includes(lesson.id)) {
+                completedInThisCourse++;
+            }
+        });
+    });
+    
+    const initialProgress = totalLessons > 0 ? Math.round((completedInThisCourse / totalLessons) * 100) : 0;
+    document.querySelector('.progress-fill').style.width = `${initialProgress}%`;
+    document.querySelector('.percentage').innerText = `${initialProgress}%`;
+
+    // Keep the "Mark as Complete" button synced when clicking around
+    const originalLoadLesson = typeof loadLesson === 'function' ? loadLesson : null;
+    
+    window.loadLesson = function(lesson) {
+        if (originalLoadLesson) originalLoadLesson(lesson);
+        
+        const btn = document.getElementById('markCompleteBtn');
+        if (completedList.includes(lesson.id)) {
+            btn.innerHTML = '<i class="fa-solid fa-check-double"></i> Completed';
+            btn.style.background = '#95a5a6';
+            btn.disabled = true;
+        } else {
+            btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Mark as Complete';
+            btn.style.background = '#2ecc71';
+            btn.disabled = false;
+        }
+    };
+});

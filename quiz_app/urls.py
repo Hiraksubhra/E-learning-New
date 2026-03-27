@@ -15,6 +15,7 @@ urlpatterns = [
     path('login/submit/', views.login_req, name='login_req'),
     path('logout/', views.logout_view, name='logout_view'),
     path('register/', views.register_page, name='register_page'),
+    path('mark-complete/', views.mark_lesson_complete, name='mark_complete'),
 
     path('generate-quiz/', GenerateQuizView.as_view(), name='generate-quiz'),
     path('ask-buddy/', AskBuddyView.as_view(), name='ask_buddy'),
